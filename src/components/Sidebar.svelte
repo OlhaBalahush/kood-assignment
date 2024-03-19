@@ -552,7 +552,7 @@
     .nav-btns {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 0.25rem;
         padding: 0 0.5rem;
         margin-top: 1.25rem;
         flex: 1 1 0%;

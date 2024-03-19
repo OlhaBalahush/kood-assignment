@@ -10,13 +10,16 @@
 	--gray-text-light: #4C5057;
 	--accent-light-1: #BFFFF3;
 	--light-gray: #E2E4E5;
+	--dark-gray: #696C72;
 
 	--bg-dark-1: #24282f;
 	--bg-dark-2: #2F343C;
 	--text-dark: #F5F5F5;
 	--gray-text-dark: #9DA0A7;
 	--accent-dark-1: #1D4A48;
+
 	--accent: #009C7E;
+	--accent-2: #C7D100;
 	--btn-hovered: rgba(226, 228, 229, 0.4);
 
 	--body-font-family: 'Nexa', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
@@ -26,6 +29,8 @@
 	--title-1-font-size: 1.5rem;
 	--title-2-font-size: 1.25rem;
 	--title-font-weigth: 700;
+
+	--add-text-font-size: 0.875rem;
 }
 
 :root[data-theme="light"] {
@@ -37,6 +42,7 @@
 	--gray-text-color: var(--gray-text-light);
 	--btn-active: var(--accent-light-1);
 	--stroke: var(--light-gray);
+	--gray-1: var(--light-gray);
 }
 
 :root[data-theme="dark"] {
@@ -48,6 +54,7 @@
 	--gray-text-color: var(--gray-text-dark);
 	--btn-active: var(--accent-dark-1);
 	--stroke: var(--bg-dark-2);
+	--gray-1: var(--dark-gray);
 }
 
 html,
@@ -89,6 +96,7 @@ body {
 main {
 	flex: 1 1 0%;
 	padding: 1.5rem 2rem;
+	margin: 0 auto;
 }
 
 a {
@@ -98,6 +106,57 @@ a {
 
 .pd05 {
 	padding: 0.5rem;
+}
+
+.pd15 {
+	padding: 1.5rem;
+}
+
+.mb15 {
+	margin-bottom: 1.5rem;
+}
+
+.fr {
+	display: flex;
+	flex-direction: row;
+}
+
+.sb {
+	justify-content: space-between;
+}
+
+.g1 {
+	gap: 1rem;
+}
+
+.add-t{
+	font-size: var(--add-text-font-size);
+	color: var(--gray-text-color);
+}
+
+.upper-t {
+	text-transform: capitalize;
+}
+
+.m {
+	display: flex;
+	align-items: center;
+}
+
+.col-span-12 {
+    grid-column: span 12 / span 12;
+}
+
+.col-span-4 {
+    grid-column: span 4 / span 4;
+}
+
+.col-span-8 {
+    grid-column: span 8 / span 8;
+}
+
+.row-span-2 {
+    grid-row: span 2 / span 2;
 }
 
 .icon-btn {
