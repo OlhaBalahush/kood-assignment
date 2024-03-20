@@ -33,6 +33,7 @@
 	--add-text-font-size: 0.875rem;
 }
 
+/* theme changing for light and dark themes */
 :root[data-theme="light"] {
 	--bg-color-1: var(--bg-light-1);
 	--bg-color-2: var(--bg-light-2);
@@ -97,6 +98,8 @@ main {
 	flex: 1 1 0%;
 	padding: 1.5rem 2rem;
 	margin: 0 auto;
+
+    max-width: var(--max-width, 100%);
 }
 
 a {
@@ -147,12 +150,12 @@ a {
     grid-column: span 12 / span 12;
 }
 
-.col-span-4 {
-    grid-column: span 4 / span 4;
+.col-span-5 {
+    grid-column: span 5 / span 5;
 }
 
-.col-span-8 {
-    grid-column: span 8 / span 8;
+.col-span-7 {
+    grid-column: span 7 / span 7;
 }
 
 .row-span-2 {
@@ -165,8 +168,19 @@ a {
 	padding: 0;
 }
 
+@media (min-width: 1000px) {
+	main {
+		width: 75%;
+	}
+}
+
 @media (max-width: 1025px) {
 	.main-wrap {
 		padding-left: 0;
+	}
+
+	main {
+		width: calc(100vw - 2rem);
+		padding: 1.5rem 1rem;
 	}
 }

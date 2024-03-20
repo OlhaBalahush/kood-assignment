@@ -3,9 +3,10 @@
     import Chart from "chart.js/auto";
     import "chartjs-adapter-date-fns";
 
+    // hold the Chart.js instance
     let chart;
-    let mouseX = null; // Initialize mouseX with a default value
 
+    // possible datasets
     const rawData = [
         {
             date: "2023-06-10",
@@ -59,7 +60,9 @@
             currPoints: "1000",
         },
     ];
-    // Helper function to generate an array of date strings between two dates
+
+    // generates an array of date strings between two dates, inclusive
+    // function logic to populate an array with dates from startDate to endDate
     function generateDateLabels(startDate, endDate) {
         const dateArray = [];
         let currentDate = new Date(startDate);
@@ -72,6 +75,8 @@
         return dateArray;
     }
 
+    // converts raw data into a format suitable for Chart.js, filtering and processing the data as needed
+    // function logic to transform rawData into a dataset for the chart
     function convertToDataset(rawData, startDate, endDate) {
         // Ensure rawData is sorted by date in ascending order
         rawData.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -116,21 +121,27 @@
     }
 
     onMount(() => {
+        // initializes the chart instance when the component is mounted in the DOM
         const ctx = document.getElementById("progressChart").getContext("2d");
 
+        // define the start and end dates for the chart's X-axis
         const endDate = new Date();
         const startDate = new Date(endDate);
         startDate.setMonth(endDate.getMonth() - 1);
 
+        // labels for the X-axis
         const labels = generateDateLabels(startDate, endDate);
 
+        // datasets convertation
         const dataset1 = convertToDataset(rawData, startDate, endDate);
         const dataset2 = convertToDataset(rawData2, startDate, endDate);
 
+        // create the Chart.js instance with the specified configuration
         chart = new Chart(ctx, {
             type: "line",
             data: {
                 labels: labels,
+                // array of datasets to plot on the chart
                 datasets: [
                     {
                         label: "Cumulative Points",
@@ -154,6 +165,8 @@
                 ],
             },
             options: {
+                // Chart.js configuration options for responsiveness, axis types and formats, tooltips, etc.
+                responsive: true,
                 scales: {
                     x: {
                         type: "time",
@@ -201,7 +214,7 @@
                         displayColors: false,
                         callbacks: {
                             title: function (tooltipItems) {
-                                return 'Task Name'; // Show the date
+                                return 'Task Name';
                             },
                             label: function (context) {
                                 return `${(context.parsed.y >= 1024 ? `${(context.parsed.y / 1024).toFixed(1)}MB` : `${context.parsed.y}KB`)}`;
@@ -213,6 +226,7 @@
         });
     });
 
+    // function to update the chart with a new time range based on the number of months provided
     export function updateChart(months) {
         const endDate = new Date();
         const startDate = new Date(endDate);
@@ -221,26 +235,17 @@
         const dataset1 = convertToDataset(rawData, startDate, endDate, 0); // Regenerate dataset1
         const dataset2 = convertToDataset(rawData2, startDate, endDate, 0); // Regenerate dataset2
 
-        // Update the chart's data
+        // update the chart's data
         chart.data.datasets[0].data = dataset1;
         chart.data.datasets[1].data = dataset2;
         chart.options.scales.x.min = startDate.toISOString().split("T")[0];
         chart.options.scales.x.max = endDate.toISOString().split("T")[0];
 
-        // Refresh the chart to show the updated data
+        // refresh the chart to show the updated data
         chart.update();
-    }
-
-    function handleMouseMove(event) {
-        const rect = event.target.getBoundingClientRect();
-        mouseX = event.clientX - rect.left;
-        chart.update("none"); // Trigger a chart update to redraw the line
     }
 </script>
 
 <canvas
     id="progressChart"
-    width="800"
-    height="400"
-    on:mousemove={handleMouseMove}
 ></canvas>

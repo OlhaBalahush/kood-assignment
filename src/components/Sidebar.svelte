@@ -1,22 +1,26 @@
-<!-- src/Sidebar.svelte -->
 <script>
     import { createEventDispatcher } from "svelte";
     const dispatch = createEventDispatcher();
 
+    // props that allow the parent component to control the sidebar's open state and theme.
     export let isOpen = true;
     export let isDark = false;
 
+    // checks the screen width to set the sidebar's initial open state.
+    // closes the sidebar on smaller screens by default.
     if (window.matchMedia("(max-width: 1025px)").matches) {
-        isOpen = false
+        isOpen = false;
     } else {
-        isOpen = true
+        isOpen = true;
     }
 
+    // toggles the sidebar's open state and emits a custom event to notify the parent component.
     function toggleSidebar() {
         isOpen = !isOpen;
         dispatch("sidebarChange", { isOpen });
     }
-
+    // toggles the theme between light and dark by setting an attribute on the document element.
+    // also updates the `isDark` variable to reflect the current theme state.
     function toggleTheme() {
         document.documentElement.setAttribute(
             "data-theme",
@@ -601,7 +605,7 @@
         .top-bar {
             padding-top: 0.75rem;
         }
-        
+
         .close-btn {
             display: block;
         }

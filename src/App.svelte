@@ -1,90 +1,42 @@
 <script>
+    // importing components
 	import Sidebar from "./components/Sidebar.svelte";
 	import LineChart from "./components/LineChart.svelte";
-    import VerticalBar from "./components/VerticalBar.svelte";
+    import SkillsComponent from "./components/SkillsComponent.svelte";
+	import VerticalBar from "./components/VerticalBar.svelte";
+    import BadgesComponent from "./components/BadgesComponent.svelte";
 
+	// state variable to control the sidebar's open/close state
 	let isOpen = true;
+	// references to the chart components for calling methods on them
 	let lineChart;
 	let verticalBar;
+	// variables to store selected timeline for the line chart and column count for the bar chart
 	let mNum = 1;
+	let bNum = 50;
+	// check for small screen size, which will affect layout responsiveness
+	const isSmallScreen = window.innerWidth < 900;
 
-	let skills = [
-		{
-			skill: "mobile development",
-			doneProjects: 4,
-			allProjects: 20,
-			firstProject: "mobile-app-1",
-		},
-		{
-			skill: "web development",
-			doneProjects: 20,
-			allProjects: 25,
-			firstProject: "web-app-1",
-		},
-		{
-			skill: "data analysis",
-			doneProjects: 10,
-			allProjects: 18,
-			firstProject: "data-analysis-1",
-		},
-		{
-			skill: "machine learning",
-			doneProjects: 9,
-			allProjects: 30,
-			firstProject: "ml-project-1",
-		},
-		{
-			skill: "cloud computing",
-			doneProjects: 3,
-			allProjects: 15,
-			firstProject: "cloud-project-1",
-		},
-		{
-			skill: "cybersecurity",
-			doneProjects: 8,
-			allProjects: 22,
-			firstProject: "security-project-1",
-		},
-	];
-
-	let upcomingSkills = [
-		{
-			skill: "networking",
-			doneProjects: 0,
-			allProjects: 10,
-			firstProject: "networking-project-1",
-		},
-		{
-			skill: "game development",
-			doneProjects: 0,
-			allProjects: 20,
-			firstProject: "game-dev-1",
-		},
-		{
-			skill: "devops",
-			doneProjects: 0,
-			allProjects: 15,
-			firstProject: "devops-project-1",
-		},
-		{
-			skill: "blockchain",
-			doneProjects: 0,
-			allProjects: 25,
-			firstProject: "frameworks-project-1",
-		},
-	];
-
+	// toggles the sidebar's open/close state fro small screen
 	function toggleMenu() {
 		isOpen = !isOpen;
 	}
 
+	// handles change event from the sidebar, updating its open/close state
 	function handleSidebarChange(event) {
 		isOpen = event.detail.isOpen;
 	}
 
+	// updates the line chart based on the selected timeline
 	function selectTimeline(months) {
 		mNum = months;
 		lineChart.updateChart(months);
+	}
+
+	// updates the bar chart based on the selected range
+	function updateBarRange(num) {
+		bNum = num;
+		verticalBar.updateChart(num);
 	}
 </script>
 
@@ -182,53 +134,42 @@
 				</div>
 				<LineChart bind:this={lineChart} />
 			</div>
-			<div class="pd15 cont col-span-4 row-span-2 skills-cont">
+			<div
+				class="pd15 cont {isSmallScreen
+					? 'col-span-12'
+					: 'col-span-5 row-span-2'} skills-cont"
+			>
 				<h2 class="t-2">Skills</h2>
-				<div class="done-skills-cont">
-					{#each skills as skill}
-						<div class="skill-cont">
-							<div class="fr sb">
-								<div class="upper-t">{skill.skill}</div>
-								<div class="add-t">
-									{skill.doneProjects} / {skill.allProjects}
-									projects
-								</div>
-							</div>
-							<div class="gray-line">
-								<div class="p-line" style="width: calc({skill.doneProjects / skill.allProjects * 100}%);">
-									<span>
-										{(skill.doneProjects / skill.allProjects * 100).toFixed(0)}%
-									</span>
-								</div>
-							</div>
-						</div>
-					{/each}
-				</div>
-				<div class="up-skills" >Upcoming Skills</div>
-				<div>
-					{#each upcomingSkills as skill}
-						<div class="fr sb up-skill">
-							<div class="fr g1">
-								<div class="line">
-									<div class="bullet-point"></div>
-								</div>
-								<div class="upper-t m">{skill.skill}</div>
-							</div>
-							<div class="add-t m">
-								{skill.allProjects} projects |
-								<!-- svelte-ignore a11y-invalid-attribute -->
-								<a class="skill-a" href="#">{skill.firstProject}</a>
-							</div>
-						</div>
-					{/each}
-				</div>
+				<SkillsComponent />
 			</div>
-			<div class="pd15 cont col-span-8">
-				<h2 class="t-2">Distribution of Users by XP</h2>
-				<VerticalBar bind:this={verticalBar}/>
+			<div
+				class="pd15 cont {isSmallScreen ? 'col-span-12' : 'col-span-7'}"
+			>
+				<div class="chart-top-line">
+					<h2 class="t-2">Distribution of Users by XP</h2>
+					<div class="ranges-roll-cont">
+						<div class="fr sb">
+							<span>XP ranges</span>
+							<span>{bNum}</span>
+						</div>
+						<input
+							class="ranges-roll"
+							type="range"
+							min="2"
+							max="100"
+							value={bNum}
+							style="--percentage: {bNum}%;"
+							on:input={(e) => updateBarRange(+e.target.value)}
+						/>
+					</div>
+				</div>
+				<VerticalBar bind:this={verticalBar} />
 			</div>
-			<div class="pd15 cont col-span-8">
+			<div
+				class="pd15 cont {isSmallScreen ? 'col-span-12' : 'col-span-7'}"
+			>
 				<h2 class="t-2">Badges</h2>
+				<BadgesComponent />
 			</div>
 		</div>
 	</main>
@@ -236,6 +177,9 @@
 
 <style>
 	.resp-menu-bar {
+		position: fixed;
+		width: calc(100vw - 1rem);
+
 		display: none;
 		align-items: center;
 		justify-content: space-between;
@@ -250,12 +194,15 @@
 	.cont {
 		background-color: var(--bg-color-2);
 		border-radius: 0.5rem;
-		max-width: 1168px; /* Set the maximum width */
-		width: auto; /* Allow it to shrink if content is smaller */
+		width: auto;
 		box-shadow:
 			0 0 0 0 #0000,
 			0 0 0 0 #0000,
 			0 0 0 0 #0000;
+
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
 	}
 
 	.grid-cont {
@@ -278,6 +225,7 @@
 
 	.btn-g {
 		min-width: 40px;
+		width: 100%;
 		min-height: 25px;
 		background-color: transparent;
 		color: var(--text-color);
@@ -302,71 +250,66 @@
 		gap: 1.5rem;
 	}
 
-	.line {
-		height: 100%;
-		width: 2px;
-		background-color: var(--gray-1);
-
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex-direction: column;
+	.ranges-roll-cont {
+		min-width: 200px;
 	}
 
-	.bullet-point {
-		width: 8px;
-		height: 8px;
-		border-radius: 50%;
-		background-color: var(--gray-1);
+	.ranges-roll {
+		min-width: 200px;
+		width: 100%;
+		margin: 0;
 	}
 
-	.up-skills {
-		border-bottom: 1px solid var(--gray-1);
-		padding-bottom: 0.25rem;
+	input[type="range"] {
+		-webkit-appearance: none;
+		appearance: none;
+		width: 100%;
+		background: var(--bg-color-1);
+		cursor: pointer;
+		height: 2px;
 	}
 
-	.skill-cont {
-		display: flex;
-		flex-direction: column;
-		gap: 0.375rem;
+	input[type="range"]::-webkit-slider-runnable-track {
+		background: linear-gradient(
+			to right,
+			var(--accent) 0%,
+			var(--accent) var(--percentage, 0%),
+			var(--bg-color-1) var(--percentage, 0%),
+			var(--bg-color-1) 100%
+		);
+		height: 2px;
 	}
 
-	.done-skills-cont {
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-	}
-
-	.up-skill{
-		height: 35px;
-	}
-
-	.skill-a {
-		text-decoration: underline;
-	}
-
-	.gray-line {
-		background-color: var(--bg-color-1);
+	input[type="range"]::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		background-color: var(--accent);
+		width: 1rem;
 		height: 1rem;
-		border-radius: 0.5rem;
-	}
-
-	.p-line {
-		height: 100%;
-		background-color: var(--accent-2);
-		text-align: right;
-		border-radius: 0.5rem;
-		font-size: var(--add-text-font-size);
-	}
-
-	.p-line span{
-		padding-right: 0.5rem;
-		color: var(--text-light);
+		border-radius: 50%;
+		margin-top: -9px; /* Adjusts the position to ensure it's centered on the track */
 	}
 
 	@media (max-width: 1025px) {
 		.resp-menu-bar {
 			display: flex;
+		}
+
+		.cont {
+			padding: 1rem;
+		}
+
+		.chart-top-line {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 1rem;
+		}
+
+		.ranges-roll-cont {
+			width: 100%;
+		}
+
+		.btn-g-bar {
+			width: 100%;
 		}
 	}
 </style>
