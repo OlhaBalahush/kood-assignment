@@ -487,6 +487,7 @@
         background-color: var(--menu-color);
 
         transition: transform 0.3s ease;
+        z-index: 1000;
     }
 
     .sidebar.open {

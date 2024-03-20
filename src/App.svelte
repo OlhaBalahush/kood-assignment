@@ -179,6 +179,7 @@
 	.resp-menu-bar {
 		position: fixed;
 		width: calc(100vw - 1rem);
+		z-index: 900;
 
 		display: none;
 		align-items: center;

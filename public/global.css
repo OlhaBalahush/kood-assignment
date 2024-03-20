@@ -182,5 +182,6 @@ a {
 	main {
 		width: calc(100vw - 2rem);
 		padding: 1.5rem 1rem;
+		margin-top: 3.75rem;
 	}
 }
