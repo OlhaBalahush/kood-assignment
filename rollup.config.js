@@ -5,8 +5,22 @@ import terser from '@rollup/plugin-terser';
 import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import css from 'rollup-plugin-css-only';
+import adapter from '@sveltejs/adapter-static';
+import preprocess from 'svelte-preprocess';
 
 const production = !process.env.ROLLUP_WATCH;
+
+const config = {
+	preprocess: preprocess(),
+
+	kit: {
+		adapter: adapter(),
+
+		paths: {
+			base: '/kood-assignment',
+		},
+	},
+};
 
 function serve() {
 	let server;
@@ -30,7 +44,6 @@ function serve() {
 }
 
 export default {
-	base: "/kood-assignment/",
 	input: 'src/main.js',
 	output: {
 		sourcemap: true,
