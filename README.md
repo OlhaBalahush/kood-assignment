@@ -17,7 +17,7 @@ The Progress Tracker UI/UX assignment aims to design an intuitive and informativ
 
 - Svelte: A reactive JavaScript framework for building user interfaces.
 - HTML/CSS: Used for structuring and styling the user interface components.
-<!-- - Chart.js: A JavaScript library for creating interactive charts and graphs. -->
+- Chart.js: A JavaScript library for creating interactive charts and graphs.
 
 ## Getting Started
 
